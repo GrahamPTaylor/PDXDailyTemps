@@ -6,6 +6,7 @@ library(plyr)
 library(lubridate)
 
 # data from - https://w2.weather.gov/climate/local_data.php?wfo=pqr
+setwd('C:/Users/Graham/Desktop/Grad School')
 #read data
 climdata <- data.frame(read.csv(file = 'Portland_dailyclimatedata.csv', header = T))
 # delete non-high temperature rows
@@ -41,7 +42,7 @@ dtd$yearmonthf <- factor(dtd$yearmonth)
 dtd$week <- as.numeric(dtd$week)
 dtd <- ddply(dtd,.(yearmonthf), transform, monthweek = 1+week-min(week))
 head(dtd)
-dtd$Max[is.na(dtd$Max)] <- 0
+
 
 dtd$wday <- wday(dtd$date)
 
@@ -68,7 +69,8 @@ dtd$MaxDiscrete[dtd$Max >= 50 & dtd$Max < 60] <- 50
 dtd$MaxDiscrete[dtd$Max >= 60 & dtd$Max < 70] <- 60
 dtd$MaxDiscrete[dtd$Max >= 70 & dtd$Max < 80] <- 70
 dtd$MaxDiscrete[dtd$Max >= 80 & dtd$Max < 90] <- 80
-dtd$MaxDiscrete[dtd$Max >= 90] <- 90
+dtd$MaxDiscrete[dtd$Max >= 90 & dtd$Max < 100] <- 90
+dtd$MaxDiscrete[dtd$Max >= 100] <- 100
 
 
 #month days of the year
@@ -90,12 +92,13 @@ t <- ggplot(dtd, aes(newDay, Year, fill =  as.factor(MaxDiscrete))) +
   geom_tile() + 
   #facet_grid(Year~Month) + 
   #scale_fill_discrete(low="white", high="red", guide = "colorbar") +
-  scale_fill_discrete() +
+  #scale_fill_discrete() +
+  scale_colour_brewer(palette = "Set1") +
   labs(title = "PDX Daily Maximums 1982 - 2017",
        #subtitle = "Data up to April 2018",
        x = "Day of Year",
        y = "Year",
-       fill = "Max Temp Greater Than (F)") +
+       fill = "Max Temp in the x's (F)") +
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         panel.background = element_blank(), 
@@ -149,3 +152,5 @@ annotate("text", x = mds[1]/2, y = 2018, label = "Jan", size = 4)+
   annotate("text", x = mds[12]-(mds[12]-mds[11])/2, y = 2018, label = "Dec", size = 4) 
 
 t
+
+
