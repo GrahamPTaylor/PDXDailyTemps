@@ -5,8 +5,12 @@ library(zoo)
 library(plyr)
 library(lubridate)
 
+# data from https://w2.weather.gov/climate/local_data.php?wfo=pqr
+
+
 climdata <- data.frame(read.csv(file = 'Portland_dailyclimatedata.csv', header = T))
-head(climdata)# delete non-high temperature rows
+head(climdata)
+# delete non-high temperature rows
 tempdata <- climdata[climdata$Type == 'TN',]
 # limit to semi recent data
 newtempdata <- tempdata[tempdata$Year > '1980',]
@@ -91,7 +95,9 @@ tm <- ggplot(dtd, aes(newDay, Year, fill =  as.factor(MinDiscrete))) +
   geom_tile() + 
   #facet_grid(Year~Month) + 
   #scale_fill_discrete(low="white", high="red", guide = "colorbar") +
-  scale_fill_discrete() +
+  #scale_fill_manual(values = c("darkblue","dodgerblue3","forestgreen","darkseagreen","moccasin","lightsalmon","tomato","red4","white")) +
+  #same color scale as max below (except for tomato, representing 70s, to stand out a little more)
+  scale_fill_manual(values = c("darkviolet","darkblue","dodgerblue3","forestgreen","darkseagreen","moccasin","lightsalmon","tomato","white")) +
   #scale_colour_brewer(palette = "Set1") +
   #scale_fill_continuous()+
   labs(title = "PDX Daily Minimums 1982 - 2017",
@@ -108,19 +114,33 @@ tm <- ggplot(dtd, aes(newDay, Year, fill =  as.factor(MinDiscrete))) +
   scale_x_continuous(limits = c(0,366), breaks = seq(0,365,30)) +
   scale_y_continuous(limits = c(1981,2018), breaks = seq(1982,2017,1)) +
   
-  # lines indicating month breaks
+  # lines indicating month breaks - whole graph
   
-  geom_segment(aes(x = mds[1], y = 1981.5, xend = mds[1], yend = 2017.5), color = "grey")+
-  geom_segment(aes(x = mds[2], y = 1981.5, xend = mds[2], yend = 2017.5), color = "grey")+
-  geom_segment(aes(x = mds[3], y = 1981.5, xend = mds[3], yend = 2017.5), color = "grey")+
-  geom_segment(aes(x = mds[4], y = 1981.5, xend = mds[4], yend = 2017.5), color = "grey")+
-  geom_segment(aes(x = mds[5], y = 1981.5, xend = mds[5], yend = 2017.5), color = "grey")+
-  geom_segment(aes(x = mds[6], y = 1981.5, xend = mds[6], yend = 2017.5), color = "grey")+
-  geom_segment(aes(x = mds[7], y = 1981.5, xend = mds[7], yend = 2017.5), color = "grey")+
-  geom_segment(aes(x = mds[8], y = 1981.5, xend = mds[8], yend = 2017.5), color = "grey")+
-  geom_segment(aes(x = mds[9], y = 1981.5, xend = mds[9], yend = 2017.5), color = "grey")+
-  geom_segment(aes(x = mds[10], y = 1981.5, xend = mds[10], yend = 2017.5), color = "grey")+
-  geom_segment(aes(x = mds[11], y = 1981.5, xend = mds[11], yend = 2017.5), color = "grey")+
+  #geom_segment(aes(x = mds[1], y = 1981.5, xend = mds[1], yend = 2017.5), color = "grey", size = 0.4, alpha = 0.5)+
+  #geom_segment(aes(x = mds[2], y = 1981.5, xend = mds[2], yend = 2017.5), color = "grey", size = 0.4, alpha = 0.5)+
+  #geom_segment(aes(x = mds[3], y = 1981.5, xend = mds[3], yend = 2017.5), color = "grey", size = 0.4, alpha = 0.5)+
+  #geom_segment(aes(x = mds[4], y = 1981.5, xend = mds[4], yend = 2017.5), color = "grey", size = 0.4, alpha = 0.5)+
+  #geom_segment(aes(x = mds[5], y = 1981.5, xend = mds[5], yend = 2017.5), color = "grey", size = 0.4, alpha = 0.5)+
+  #geom_segment(aes(x = mds[6], y = 1981.5, xend = mds[6], yend = 2017.5), color = "grey", size = 0.4, alpha = 0.5)+
+  #geom_segment(aes(x = mds[7], y = 1981.5, xend = mds[7], yend = 2017.5), color = "grey", size = 0.4, alpha = 0.5)+
+  #geom_segment(aes(x = mds[8], y = 1981.5, xend = mds[8], yend = 2017.5), color = "grey", size = 0.4, alpha = 0.5)+
+  #geom_segment(aes(x = mds[9], y = 1981.5, xend = mds[9], yend = 2017.5), color = "grey", size = 0.4, alpha = 0.5)+
+  #geom_segment(aes(x = mds[10], y = 1981.5, xend = mds[10], yend = 2017.5), color = "grey", size = 0.4, alpha = 0.5)+
+  #geom_segment(aes(x = mds[11], y = 1981.5, xend = mds[11], yend = 2017.5), color = "grey", size = 0.4, alpha = 0.5)+
+
+  # lines indicating month breaks - just top
+
+  geom_segment(aes(x = mds[1], y = 2017.5, xend = mds[1], yend = 2018), color = "grey", size = 0.4, alpha = 0.5)+
+  geom_segment(aes(x = mds[2], y = 2017.5, xend = mds[2], yend = 2018), color = "grey", size = 0.4, alpha = 0.5)+
+  geom_segment(aes(x = mds[3], y = 2017.5, xend = mds[3], yend = 2018), color = "grey", size = 0.4, alpha = 0.5)+
+  geom_segment(aes(x = mds[4], y = 2017.5, xend = mds[4], yend = 2018), color = "grey", size = 0.4, alpha = 0.5)+
+  geom_segment(aes(x = mds[5], y = 2017.5, xend = mds[5], yend = 2018), color = "grey", size = 0.4, alpha = 0.5)+
+  geom_segment(aes(x = mds[6], y = 2017.5, xend = mds[6], yend = 2018), color = "grey", size = 0.4, alpha = 0.5)+
+  geom_segment(aes(x = mds[7], y = 2017.5, xend = mds[7], yend = 2018), color = "grey", size = 0.4, alpha = 0.5)+
+  geom_segment(aes(x = mds[8], y = 2017.5, xend = mds[8], yend = 2019), color = "grey", size = 0.4, alpha = 0.5)+
+  geom_segment(aes(x = mds[9], y = 2017.5, xend = mds[9], yend = 2018), color = "grey", size = 0.4, alpha = 0.5)+
+  geom_segment(aes(x = mds[10], y = 2017.5, xend = mds[10], yend = 2018), color = "grey", size = 0.4, alpha = 0.5)+
+  geom_segment(aes(x = mds[11], y = 2017.5, xend = mds[11], yend = 2018), color = "grey", size = 0.4, alpha = 0.5)+
   
   # lines indicating seasonal breaks - would look better if the "water year" started at 0 on the x axis
   # instead of the calendar year
@@ -132,7 +152,7 @@ tm <- ggplot(dtd, aes(newDay, Year, fill =  as.factor(MinDiscrete))) +
   #               size = 0.8, color = "dark green", alpha = 0.7) +
   #fall
   #  geom_segment(aes(x = mds[8] + 20, y = 1981.5, xend = mds[8] + 20, yend = 2017.5),
-  #               size = 0.8, color = "dark green", alpha = 0.7) +
+#               size = 0.8, color = "dark green", alpha = 0.7) +
 #winter
 #  geom_segment(aes(x = mds[11] + 20, y = 1981.5, xend = mds[11] + 20, yend = 2017.5),
 #               size = 0.8, color = "dark green", alpha = 0.7) +
